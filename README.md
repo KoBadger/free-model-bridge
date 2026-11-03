@@ -73,6 +73,14 @@ OpenCode's catalog is sorted by model ID, and there is no "favorite" field in V2
 
 The knob for that ordering is the `PRIORITY` array in `bin/sync-models.mjs` — add, remove, or reorder ids there and re-run `npm run sync`. New upstream models that aren't in the list append alphabetically at the bottom, so nothing ever gets lost.
 
+### Model guide (PDF)
+
+[`docs/model-guide.pdf`](docs/model-guide.pdf) — a 3-page ranked rundown of all 28 models: what each specializes in, context / max-output / vision at a glance, a pick-by-task cheat sheet, and the measured latency table. It matches the picker order (`00`–`27`), so the PDF and `/models` agree. Source is `docs/model-guide.html`; re-render with Edge:
+
+```powershell
+msedge --headless=new --no-pdf-header-footer --print-to-pdf="$PWD\docs\model-guide.pdf" "file:///$($PWD.Path -replace '\\','/')/docs/model-guide.html"
+```
+
 ## What you actually get
 
 **Models observed live on 2026-11-03** (roster is real-time; `npm run sync` refreshes). In OpenCode each one is exposed as `<NN>-<id>` in curated order — `ofm/01-deepseek-v4.1-flash-free`, `ofm/07-nvidia/nemotron-3-ultra-550b-a55b:free`, … — while `modelID` keeps the raw id below:

@@ -7,7 +7,8 @@
     "setup": "node bin/setup.mjs",
     "sync": "node bin/sync-models.mjs",
     "fcc": "node bin/add-fcc-provider.mjs",
-    "bakeoff": "node bin/bakeoff.mjs"
+    "bakeoff": "node bin/bakeoff.mjs",
+    "verify": "node bin/verify-stack.mjs"
   },
   "engines": { "node": ">=22.19.0" },
   "license": "MIT"

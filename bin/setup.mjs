@@ -11,7 +11,7 @@
  *   2. Fetches the OFM gateway (git clone --depth 1) if not already present
  *   3. Starts the gateway if /health is not answering, then waits for it
  *   4. Creates ~/.config/opencode/opencode.json if missing
- *   5. Regenerates the `ofm` provider + policy allow (delegates to bin/sync-models.mjs)
+ *   5. Regenerates the `00-free` provider + policy allow (delegates to bin/sync-models.mjs)
  *   6. (win32) Adds a Startup-folder shortcut — no admin needed
  *   7. --with-fcc: installs free-claude-code via uv, pins HOST=127.0.0.1,
  *      starts it, wires the `fcc` provider, adds a startup shortcut (win32)
@@ -114,7 +114,7 @@ if (!fs.existsSync(CONFIG)) {
 }
 
 /* ---------- 5. sync provider ---------- */
-step('provider sync (ofm)')
+step('provider sync (00-free)')
 if (!run(process.execPath, [path.join(REPO_ROOT, 'bin', 'sync-models.mjs'), '--config', CONFIG, '--port', String(PORT)], { env: { ...process.env, OFM_HOME: DATA_DIR } }))
   die('sync-models.mjs failed — run it manually to see the error')
 
@@ -200,7 +200,7 @@ if (WITH_FCC) {
 console.log(`
 ================================================================
  free-model-bridge is set up.
-   gateway:   http://127.0.0.1:${PORT}          (ofm provider in OpenCode)
+   gateway:   http://127.0.0.1:${PORT}          (00-free provider in OpenCode)
    dashboard: http://127.0.0.1:${PORT}           (login token in service.out.log)
 ${WITH_FCC ? `   fcc:       ${FCC_PORTAL}/admin          (fcc provider in OpenCode)\n` : ''}
  Manual steps that need *you* (web UI, your accounts):

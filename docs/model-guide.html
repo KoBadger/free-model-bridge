@@ -20,7 +20,7 @@
   header .meta { color: #6f8cab; font-size: 8.2pt; margin-top: 3mm; }
   h2 {
     font-size: 12.5pt; margin: 6mm 0 2.5mm; padding-bottom: 1.2mm;
-    border-bottom: 1.2pt solid #d5dee9; color: #0d1b2e;
+    border-bottom: 1.2pt solid #d5dee9; color: #0d1b2e; break-after: avoid;
   }
   h2 .n { color: #1f6feb; font-weight: 700; margin-right: 1.5mm; }
   p { margin: 0 0 2.5mm; }
@@ -59,6 +59,10 @@
   }
   .avoid { page-break-inside: avoid; }
   ul { margin: 0 0 3mm; padding-left: 4.5mm; }
+  .notes { column-count: 2; column-gap: 6mm; }
+  .fn { break-inside: avoid; margin: 0 0 2.3mm; font-size: 8.1pt; line-height: 1.35; }
+  .fn b { color: #0d1b2e; font-size: 8.5pt; }
+  .fn .lane { color: #6b7f94; font-size: 7.1pt; }
   li { margin-bottom: 1.2mm; }
 </style>
 </head>
@@ -66,8 +70,8 @@
 
 <header>
   <h1>Free Model Stack — Model Guide</h1>
-  <div class="sub">28 keyless models across the free frontier lane, the Kilo pool and failover combos — ranked for practical use in OpenCode</div>
-  <div class="meta">Generated 2026-11-03 · provider <b>ofm</b> (127.0.0.1:18900) · roster is live, re-run <code>npm run sync</code> after it changes · ids and numbers match the <code>/models</code> picker</div>
+  <div class="sub">27 keyless models across the free frontier lane, the Kilo pool and failover combos — ranked for practical use in OpenCode</div>
+  <div class="meta">Generated 2026-11-03 · provider <b>00-free</b> (127.0.0.1:18900) · roster is live, re-run <code>npm run sync</code> after it changes · ids and numbers match the <code>/models</code> picker</div>
 </header>
 
 <h2><span class="n">1</span>How to read this</h2>
@@ -85,7 +89,7 @@
   most for big rewrites and document generation.
 </div>
 
-<h2><span class="n">2</span>Ranked roster (28 models)</h2>
+<h2><span class="n">2</span>Ranked roster (27 models)</h2>
 <table>
   <thead>
     <tr>
@@ -218,72 +222,65 @@
       <td><span class="badge kilo">kilo</span></td>
       <td class="dim">262k</td><td class="dim">32k</td><td class="yes">✓</td>
       <td>Small vision generalist; strong multilingual instruction following.</td>
-    </tr>
+    </tr>
     <tr>
       <td class="num">18</td>
-      <td class="model">Ling 3.1 Flash · kilo<small>inclusionai/ling-3.1-flash-1019-free</small></td>
-      <td><span class="badge kilo">kilo</span></td>
-      <td class="dim">1M</td><td class="dim">262k</td><td class="no">—</td>
-      <td>Efficient 1M-context with 262k outputs — long code transformations at low cost.</td>
-    </tr>
-    <tr>
-      <td class="num">19</td>
       <td class="model">Big Pickle · free<small>big-pickle</small></td>
       <td><span class="badge free">free</span></td>
       <td class="dim">262k</td><td class="dim">131k</td><td class="yes">✓</td>
       <td>General chat with vision and a roomy output budget; comfortable everyday fallback.</td>
     </tr>
     <tr>
-      <td class="num">20</td>
+      <td class="num">19</td>
       <td class="model">Beam · free<small>beam-free</small></td>
       <td><span class="badge free">free</span></td>
       <td class="dim">131k</td><td class="dim">32k</td><td class="no">—</td>
       <td>General reasoning, mid-size; dependable mid-tier when the flagships queue up.</td>
     </tr>
     <tr>
-      <td class="num">21</td>
+      <td class="num">20</td>
       <td class="model">Beam 1.0 · kilo<small>reflection/beam-free</small></td>
       <td><span class="badge kilo">kilo</span></td>
       <td class="dim">1M</td><td class="dim">131k</td><td class="no">—</td>
       <td>Reasoning at 1M context — long analysis without the free-lane overhead.</td>
     </tr>
     <tr>
-      <td class="num">22</td>
+      <td class="num">21</td>
       <td class="model">Flint 40B · free<small>flint-40b-free</small></td>
       <td><span class="badge free">free</span></td>
       <td class="dim">131k</td><td class="dim">32k</td><td class="no">—</td>
       <td>40B open reasoning, solid mid-tier judgment on everyday engineering questions.</td>
     </tr>
     <tr>
-      <td class="num">23</td>
+      <td class="num">22</td>
       <td class="model">Pulse Alpha · free<small>pulse-alpha-free</small></td>
       <td><span class="badge free">free</span></td>
       <td class="dim">131k</td><td class="dim">32k</td><td class="no">—</td>
       <td>Experimental generalist — a taste of upcoming free frontier models; expect volatility.</td>
     </tr>
     <tr>
-      <td class="num">24</td>
+      <td class="num">23</td>
       <td class="model">LFM2.5 2.6B · kilo<small>liquid/lfm-2.5-2.6b:free</small></td>
       <td><span class="badge kilo">kilo</span></td>
       <td class="dim">64k</td><td class="dim">8k</td><td class="no">—</td>
       <td>Tiny and fast: classification, extraction, titles — for when every millisecond counts.</td>
     </tr>
     <tr>
-      <td class="num">25</td>
+      <td class="num">24</td>
       <td class="model">Xing4.0 29B · kilo<small>xingchen-agi/xing4.0-29b-a4b:free</small></td>
       <td><span class="badge kilo">kilo</span></td>
       <td class="dim">262k</td><td class="dim">236k</td><td class="no">—</td>
       <td>Sparse 29B MoE: cheap long-output work — bulk rewrites and data generation.</td>
     </tr>
     <tr>
-      <td class="num">26</td>
+      <td class="num">25</td>
       <td class="model">Nemotron 3 Nano Omni · kilo<small>nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free</small></td>
       <td><span class="badge kilo">kilo</span></td>
       <td class="dim">256k</td><td class="dim">65k</td><td class="yes">✓</td>
       <td>Small omni reasoning + vision; thrifty for image-aware batch jobs.</td>
     </tr>
     <tr>
-      <td class="num">27</td>
+      <td class="num">26</td>
       <td class="model">Nemotron 3.5 Content Safety · kilo<small>nvidia/nemotron-3.5-content-safety:free</small></td>
       <td><span class="badge kilo">kilo</span></td>
       <td class="dim">128k</td><td class="dim">8k</td><td class="yes">✓</td>
@@ -292,7 +289,38 @@
   </tbody>
 </table>
 
-<h2><span class="n">3</span>Pick by task</h2>
+<h2><span class="n">3</span>Field notes — what each model is for</h2>
+<div class="notes">
+  <div class="fn"><b>00 · Auto Combo</b> <span class="lane">combo</span><br>Chains free links and only fails over when a link dies before producing content. For unattended jobs and a “just work” default.</div>
+  <div class="fn"><b>01 · DeepSeek V4.1 Flash</b> <span class="lane">free</span><br>All-round reasoning and coding with the biggest output budget here (384k). The main driver for real coding sessions and long writes.</div>
+  <div class="fn"><b>02 · GLM 5.3 Flash</b> <span class="lane">free</span><br>Fast, well-structured, strong multilingual coverage, vision. A second opinion, translations, quick screenshot reviews.</div>
+  <div class="fn"><b>03 · MiMo V2.6 Flash</b> <span class="lane">free</span><br>Balanced multimodal generalist. UI iteration, screenshot → notes, everyday image + text chat.</div>
+  <div class="fn"><b>04 · Nemotron 3.5 Super VL</b> <span class="lane">free</span><br>Reads images carefully — charts, tables, UI, OCR-style extraction. Diagram → spec, screenshot → bug report.</div>
+  <div class="fn"><b>05 · Nemotron 3.5 Lightning</b> <span class="lane">free</span><br>The quickest free-lane feel on short context. Quick chat, small edits, tight tool loops (128k cap).</div>
+  <div class="fn"><b>06 · Kilo Auto</b> <span class="lane">kilo</span><br>Routes inside Kilo's free pool with the leanest Kilo overhead. Hands-off default; prompts may be logged upstream.</div>
+  <div class="fn"><b>07 · Nemotron 3 Ultra 550B</b> <span class="lane">kilo</span><br>The heaviest reasoning in the stack. Architecture calls, postmortems, hard debugging — slow, so not for churn.</div>
+  <div class="fn"><b>08 · Nemotron 3.5 Super VL (Kilo)</b> <span class="lane">kilo</span><br>Same careful vision work without the Zen-lane prompt overhead. Image-heavy tasks when the free lane throttles.</div>
+  <div class="fn"><b>09 · Nemotron 3.5 Lightning (Kilo)</b> <span class="lane">kilo</span><br>1M context at speed. First-pass triage of huge logs or diffs, then hand the finding to a deeper model (65k out).</div>
+  <div class="fn"><b>10 · Inkling</b> <span class="lane">kilo</span><br>Multi-step agentic work with 262k outputs. Autonomous refactor loops and long tool-driven research.</div>
+  <div class="fn"><b>11 · Inkling Small</b> <span class="lane">kilo</span><br>Same envelope at lower cost per iteration. test-fix-test cycles; escalate to 10 for the final pass.</div>
+  <div class="fn"><b>12 · Dots3 Note Preview</b> <span class="lane">kilo</span><br>Document scale in <i>and</i> out — a 460k output ceiling. Whole books, reports, specs; long inputs restructured.</div>
+  <div class="fn"><b>13 · Glyph Cluster</b> <span class="lane">kilo</span><br>Mass transformation: rewrite, translate, summarize large inputs with room to write back. Not a deep reasoner.</div>
+  <div class="fn"><b>14 · Flint 1.0</b> <span class="lane">kilo</span><br>Reasoning plus long output. Design docs and thorough reviews that need depth <i>and</i> length.</div>
+  <div class="fn"><b>15 · North Mini Code</b> <span class="lane">kilo</span><br>Code review, refactors, tests, diffs. Purpose-built; pair with 01 when the task is half prose.</div>
+  <div class="fn"><b>16 · OpenRouter Free Router</b> <span class="lane">kilo</span><br>Breadth across OpenRouter's own <code>:free</code> catalog. Variety and fallback when Kilo's pool is saturated.</div>
+  <div class="fn"><b>17 · Gemma 4 31B</b> <span class="lane">kilo</span><br>Small-model discipline: predictable formatting, multilingual, vision. Image triage at volume.</div>
+  <div class="fn"><b>18 · Big Pickle</b> <span class="lane">free</span><br>Roomy general chat with vision. Everyday Q&amp;A, doc drafting, a comfortable fallback when flagships throttle.</div>
+  <div class="fn"><b>19 · Beam</b> <span class="lane">free</span><br>Dependable mid-tier reasoning. A safe, consistent everyday choice rather than a specialist.</div>
+  <div class="fn"><b>20 · Beam 1.0 (Kilo)</b> <span class="lane">kilo</span><br>Reasoning at 1M context with leaner overhead. Long analysis when the free lane is busy.</div>
+  <div class="fn"><b>21 · Flint 40B</b> <span class="lane">free</span><br>40B open-model judgment. A second perspective on plans and mid-size engineering questions.</div>
+  <div class="fn"><b>22 · Pulse Alpha</b> <span class="lane">free</span><br>A preview of upcoming free frontier models. Experimentation only — expect volatility.</div>
+  <div class="fn"><b>23 · LFM2.5 2.6B</b> <span class="lane">kilo</span><br>Tiny and fast: titles, tags, classification, extraction, routing. A utility model, not a reasoner.</div>
+  <div class="fn"><b>24 · Xing4.0 29B</b> <span class="lane">kilo</span><br>Cheap long-output generation via sparse MoE. Bulk data, mass rewrites and synthetic examples at scale.</div>
+  <div class="fn"><b>25 · Nemotron 3 Nano Omni</b> <span class="lane">kilo</span><br>Small omni reasoning plus vision. Alt text, screenshot triage at volume, image-aware batch jobs.</div>
+  <div class="fn"><b>26 · Nemotron Content Safety</b> <span class="lane">kilo</span><br>Safety and moderation classification. Policy checks and filtering — not a chat model.</div>
+</div>
+
+<h2><span class="n">4</span>Pick by task</h2>
 <table class="avoid">
   <thead><tr><th style="width:34%">If you need…</th><th>Use</th><th style="width:30%">Why</th></tr></thead>
   <tbody>
@@ -302,12 +330,12 @@
     <tr><td><b>Whole repo / book in one shot</b></td><td>12 Dots3 Note, 09 Lightning, 13 Glyph</td><td>512k–1M input with up to 460k output</td></tr>
     <tr><td><b>Coding &amp; refactors</b></td><td>15 North Mini Code, 01, 14 Flint 1.0</td><td>Purpose-built code models + long-output generalists</td></tr>
     <tr><td><b>Agentic tool loops</b></td><td>10 Inkling, 11 Inkling Small, 06 Kilo Auto</td><td>1M context, vision, 262k outputs</td></tr>
-    <tr><td><b>Bulk extraction / classification</b></td><td>24 LFM2.5 2.6B, 25 Xing4.0, 27 Content Safety</td><td>Cheap, fast, purpose-shaped</td></tr>
+    <tr><td><b>Bulk extraction / classification</b></td><td>23 LFM2.5 2.6B, 24 Xing4.0, 26 Content Safety</td><td>Cheap, fast, purpose-shaped</td></tr>
     <tr><td><b>Variety when Kilo is busy</b></td><td>16 OpenRouter Free, 00 combo</td><td>Routers over independent pools</td></tr>
   </tbody>
 </table>
 
-<h2><span class="n">4</span>Measured latency &amp; cost profile</h2>
+<h2><span class="n">5</span>Measured latency &amp; cost profile</h2>
 <div class="two">
   <div>
     <table>
@@ -324,15 +352,15 @@
     <p class="kv"><b>Reading the numbers.</b> Free-lane models are fastest but carry a large injected system prompt
     (that's the cost of keyless frontier access); Kilo lanes are leaner; FCC via OpenRouter is the leanest and slowest.
     A one-line question costs ~5.9k tokens on the free lane — for cost-sensitive bulk work prefer
-    24/25/27 or the <code>fcc</code> provider.</p>
+    23/24/26 or the <code>fcc</code> provider.</p>
     <p class="kv"><b>Ranking caveat.</b> These are latency and size facts plus practical fit. No benchmark scores are implied;
     upstream rosters change and quotas rotate. Re-run <code>npm run bakeoff</code> any time for a fresh scorecard.</p>
   </div>
 </div>
 
-<h2><span class="n">5</span>Using them in OpenCode</h2>
+<h2><span class="n">6</span>Using them in OpenCode</h2>
 <ul>
-  <li><b>Select:</b> <code>/models</code> → provider <b>ofm</b> → <code>NN-name</code>. The numbers are the ranking.</li>
+  <li><b>Select:</b> <code>/models</code> → provider <b>00-free</b> → <code>NN-name</code>. The numbers are the ranking.</li>
   <li><b>Refresh the roster</b> after upstream changes: <code>npm run sync</code> (re-pulls live models, keeps this order).</li>
   <li><b>Reorder the top</b>: edit the <code>PRIORITY</code> array in <code>bin/sync-models.mjs</code>, then <code>npm run sync</code>.
       Unlisted new models append alphabetically — nothing disappears.</li>
@@ -343,7 +371,7 @@
 </ul>
 
 <footer>
-  Free Model Stack — Model Guide · generated 2026-11-03 from the live <code>ofm</code> catalog ·
+  Free Model Stack — Model Guide · generated 2026-11-03 from the live <code>00-free</code> catalog ·
   repo <b>github.com/KoBadger/free-model-bridge</b> · gateway: Our Free Model standalone (keyless lanes) + free-claude-code (Anthropic surface).
   Rankings are practical guidance, not benchmarks. Respect upstream rate limits.
 </footer>

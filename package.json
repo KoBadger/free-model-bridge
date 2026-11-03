@@ -1,0 +1,14 @@
+{
+  "name": "free-model-bridge",
+  "version": "0.3.0",
+  "type": "module",
+  "description": "One-command free-model stack for OpenCode: OFM gateway (keyless free frontier models + Kilo pool + combos) and free-claude-code (OpenRouter :free + local Ollama), with provider sync, autostart and a bake-off harness.",
+  "scripts": {
+    "setup": "node bin/setup.mjs",
+    "sync": "node bin/sync-models.mjs",
+    "fcc": "node bin/add-fcc-provider.mjs",
+    "bakeoff": "node bin/bakeoff.mjs"
+  },
+  "engines": { "node": ">=22.19.0" },
+  "license": "MIT"
+}

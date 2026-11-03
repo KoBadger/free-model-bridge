@@ -1,0 +1,10 @@
+node_modules/
+*.log
+*.bak
+*.bak-*
+*.out
+*.err
+.fcc/
+vendor/
+.DS_Store
+Thumbs.db

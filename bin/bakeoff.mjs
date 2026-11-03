@@ -16,7 +16,14 @@ import path from 'node:path'
 
 const MAX_TOKENS = Number(process.argv[process.argv.indexOf('--max-tokens') + 1] ?? 256)
 const DATA_DIR = process.env.OFM_HOME ?? path.join(os.homedir(), '.our-free-model')
-const OFM_KEY = JSON.parse(fs.readFileSync(path.join(DATA_DIR, 'settings.json'), 'utf8')).forwardKey
+let forwardKey
+try {
+  forwardKey = JSON.parse(fs.readFileSync(path.join(DATA_DIR, 'settings.json'), 'utf8')).forwardKey
+} catch {
+  console.error(`no gateway data found at ${DATA_DIR} — run \`npm run setup\` first (or set OFM_HOME)`)
+  process.exit(1)
+}
+const OFM_KEY = forwardKey
 const R9_KEY = process.env.NINEROUTER_API_KEY ? `Bearer ${process.env.NINEROUTER_API_KEY}` : null
 
 const PROMPTS = [

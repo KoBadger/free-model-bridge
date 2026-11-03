@@ -132,7 +132,7 @@ const createStartupShortcut = (name, args) => {
 if (!SKIP_AUTOSTART && process.platform === 'win32') {
   step('autostart (Startup folder shortcut)')
   const starter = path.join(REPO_ROOT, 'start', 'gateway-start.ps1')
-  const launcherArgs = `-NoProfile -WindowStyle Hidden -ExecutionPolicy Bypass -File "${starter}" -RepoDir "${INSTALL_DIR}" -Port ${PORT}`
+  const launcherArgs = `-NoProfile -WindowStyle Hidden -ExecutionPolicy Bypass -File "${starter}" -RepoDir "${INSTALL_DIR}" -Port ${PORT} -DataDir "${DATA_DIR}"`
   if (createStartupShortcut('FreeModelGateway', launcherArgs)) ok('Startup\\FreeModelGateway.lnk created (hidden at logon, idempotent)')
   else warn('could not create the startup shortcut — autostart skipped (gateway still runs manually)')
 } else if (!SKIP_AUTOSTART) {
@@ -143,16 +143,22 @@ if (!SKIP_AUTOSTART && process.platform === 'win32') {
 /* ---------- 7. optional FCC ---------- */
 if (WITH_FCC) {
   step('free-claude-code (FCC)')
-  const uvOk = tryCommand('uv', ['--version'])
-  if (!uvOk) {
-    const installer = process.platform === 'win32'
-      ? ['powershell.exe', ['-NoProfile', '-Command', "irm https://astral.sh/uv/install.ps1 | iex"]]
-      : ['bash', ['-c', 'curl -LsSf https://astral.sh/uv/install.sh | sh']]
-    if (!run(...installer)) die('failed to install uv (needed to run FCC on python 3.14). Install it manually from https://astral.sh')
-  }
-  if (!run('uv', ['tool', 'install', '--python', '3.14.10', 'free-claude-code'])) die('uv tool install free-claude-code failed')
   const fccBin = process.platform === 'win32' ? 'fcc-server.exe' : 'fcc-server'
   const fccBinPath = path.join(os.homedir(), '.local', 'bin', fccBin)
+
+  if (fs.existsSync(fccBinPath)) {
+    ok(`fcc-server already installed (${fccBinPath}) — skipping uv tool install`)
+  } else {
+    if (!tryCommand('uv', ['--version'])) {
+      const installer = process.platform === 'win32'
+        ? ['powershell.exe', ['-NoProfile', '-Command', "irm https://astral.sh/uv/install.ps1 | iex"]]
+        : ['bash', ['-c', 'curl -LsSf https://astral.sh/uv/install.sh | sh']]
+      if (!run(...installer)) die('failed to install uv (needed to run FCC on python 3.14). Install it manually from https://astral.sh')
+      // the installer only updates the registry PATH — make the freshly installed uv visible to this process too
+      process.env.PATH = `${path.join(os.homedir(), '.local', 'bin')}${path.delimiter}${process.env.PATH ?? ''}`
+    }
+    if (!run('uv', ['tool', 'install', '--python', '3.14.10', 'free-claude-code'])) die('uv tool install free-claude-code failed')
+  }
 
   // pin loopback binding — the FCC default 0.0.0.0 is LAN-exposed with no auth
   const fccEnvDir = path.join(os.homedir(), '.fcc')

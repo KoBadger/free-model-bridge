@@ -29,10 +29,18 @@ cfg.providers.fcc = {
   settings: { baseURL: 'http://127.0.0.1:8082', apiKey: 'fcc-local' },
   models,
 }
-cfg.experimental ??= {}
-cfg.experimental.policies ??= []
-if (!cfg.experimental.policies.some(p => p.action === 'provider.use' && p.resource === 'fcc' && p.effect === 'allow')) {
-  cfg.experimental.policies.push({ action: 'provider.use', resource: 'fcc', effect: 'allow' })
+// policies: V2 top-level form (experimental.policies is deprecated)
+const legacy = cfg.experimental?.policies
+if (Array.isArray(legacy) && legacy.length) {
+  cfg.policies = [...(cfg.policies ?? [])]
+  for (const p of legacy) {
+    if (!cfg.policies.some(q => q.action === p.action && q.resource === p.resource && q.effect === p.effect)) cfg.policies.push(p)
+  }
+  delete cfg.experimental.policies
+}
+cfg.policies ??= []
+if (!cfg.policies.some(p => p.action === 'provider.use' && p.resource === 'fcc' && p.effect === 'allow')) {
+  cfg.policies.push({ action: 'provider.use', resource: 'fcc', effect: 'allow' })
 }
 
 const stamp = new Date().toISOString().replace(/[-:T]/g, '').slice(0, 14)

@@ -3,12 +3,14 @@
 # Created/installed by bin/setup.mjs of the free-model-bridge repo.
 param(
   [string]$RepoDir = (Join-Path $env:USERPROFILE "Apps\our-free-model"),
-  [int]$Port = 18900
+  [int]$Port = 18900,
+  [string]$DataDir = ""
 )
 $ErrorActionPreference = 'Stop'
 $node = (Get-Command node -ErrorAction Stop).Source
-$data = Join-Path $env:USERPROFILE ".our-free-model"
-if ($env:OFM_HOME) { $data = $env:OFM_HOME } # honor the data dir used at setup
+if ($DataDir) { $data = $DataDir }
+elseif ($env:OFM_HOME) { $data = $env:OFM_HOME }
+else { $data = Join-Path $env:USERPROFILE ".our-free-model" }
 $log = Join-Path $data "service.out.log"
 $err = Join-Path $data "service.err.log"
 

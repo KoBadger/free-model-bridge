@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Free Model Stack — Model Guide</title>
+<style>
+  @page { size: A4; margin: 13mm 13mm 15mm; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    color: #16202b; font-size: 9.6pt; line-height: 1.42;
+  }
+  header {
+    background: #0d1b2e; color: #fff; margin: 0 0 6mm; padding: 7mm 8mm 6mm;
+    border-radius: 2mm;
+  }
+  header h1 { margin: 0 0 1.5mm; font-size: 21pt; letter-spacing: .2px; }
+  header .sub { color: #9fc0e8; font-size: 10pt; }
+  header .meta { color: #6f8cab; font-size: 8.2pt; margin-top: 3mm; }
+  h2 {
+    font-size: 12.5pt; margin: 6mm 0 2.5mm; padding-bottom: 1.2mm;
+    border-bottom: 1.2pt solid #d5dee9; color: #0d1b2e; break-after: avoid;
+  }
+  h2 .n { color: #1f6feb; font-weight: 700; margin-right: 1.5mm; }
+  p { margin: 0 0 2.5mm; }
+  .note {
+    background: #f4f8fd; border-left: 2.5pt solid #1f6feb;
+    padding: 2.6mm 3.5mm; margin: 0 0 3mm; font-size: 8.8pt; color: #2b3c50;
+    border-radius: 0 1mm 1mm 0;
+  }
+  .note b { color: #0d1b2e; }
+  table { width: 100%; border-collapse: collapse; margin: 0 0 3mm; }
+  thead th {
+    background: #eef3f9; color: #33475e; font-size: 7.8pt; text-transform: uppercase;
+    letter-spacing: .5px; text-align: left; padding: 1.6mm 1.8mm;
+    border-bottom: 1pt solid #c7d3e1;
+  }
+  tbody td { padding: 1.35mm 1.8mm; border-bottom: .5pt solid #e4eaf2; vertical-align: top; font-size: 8.7pt; }
+  tbody tr:nth-child(even) { background: #fafcfe; }
+  tr { page-break-inside: avoid; }
+  td.num { font-weight: 700; color: #1f6feb; white-space: nowrap; width: 9mm; }
+  td.model { font-weight: 600; }
+  td.model small { display: block; font-weight: 400; color: #647689; font-size: 7.4pt; }
+  td.dim { white-space: nowrap; color: #485c72; }
+  .badge { display: inline-block; padding: .4mm 1.6mm; border-radius: 1.2mm; font-size: 7pt; font-weight: 700; letter-spacing: .3px; white-space: nowrap; }
+  .free { background: #e3eefc; color: #14468f; }
+  .kilo { background: #e4f4ea; color: #14603a; }
+  .combo { background: #f0e7fb; color: #5b2d93; }
+  .yes { color: #14603a; font-weight: 700; }
+  .no { color: #9aa9b8; }
+  .two { display: flex; gap: 4mm; }
+  .two > div { flex: 1; }
+  .kv { margin: 0 0 2.2mm; }
+  .kv b { color: #0d1b2e; }
+  footer {
+    margin-top: 5mm; padding-top: 2.5mm; border-top: .6pt solid #d5dee9;
+    color: #7a8a9b; font-size: 7.6pt;
+  }
+  .avoid { page-break-inside: avoid; }
+  ul { margin: 0 0 3mm; padding-left: 4.5mm; }
+  .notes { column-count: 2; column-gap: 6mm; }
+  .fn { break-inside: avoid; margin: 0 0 2.3mm; font-size: 8.1pt; line-height: 1.35; }
+  .fn b { color: #0d1b2e; font-size: 8.5pt; }
+  .fn .lane { color: #6b7f94; font-size: 7.1pt; }
+  li { margin-bottom: 1.2mm; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Free Model Stack — Model Guide</h1>
+  <div class="sub">{{COUNT}} keyless models across the free frontier lane, the Kilo pool and failover combos — ranked for practical use in OpenCode</div>
+  <div class="meta">Generated {{DATE}} · provider <b>00-free</b> (127.0.0.1:18900) · roster is live, re-run <code>npm run sync</code> after it changes · ids and numbers match the <code>/models</code> picker</div>
+</header>
+
+<h2><span class="n">1</span>How to read this</h2>
+<p>
+  Every model below is served by the local <b>Our Free Model</b> gateway with <b>no login and no API key</b>.
+  The rank is the picker order: a practical blend of <b>capability ceiling, context/output size and measured latency</b> —
+  it is guidance for picking a model fast, not a benchmark result. Free lanes rotate: when one model returns 429/503,
+  the combo or a router covers the same request.
+</p>
+<div class="note">
+  <b>Lane meaning.</b> <span class="badge free">free</span> = OpenCode Zen free lane (frontier models, large injected system
+  prompt ≈ 5.6–6.4k tokens per request). <span class="badge kilo">kilo</span> = Kilo AI's keyless <i>isFree</i> pool
+  (≈2k tokens overhead; <b>prompts may be logged upstream</b>). <span class="badge combo">combo</span> = a local failover
+  chain, not a model. <b>Vision</b> = accepts images. <b>Out</b> = max output tokens — the column that quietly matters
+  most for big rewrites and document generation.
+</div>
+
+<h2><span class="n">2</span>Ranked roster ({{COUNT}} models)</h2>
+<table>
+  <thead>
+    <tr>
+      <th>#</th><th>Model</th><th>Lane</th><th>Context</th><th>Out</th><th>Vision</th><th>Specializes in</th>
+    </tr>
+  </thead>
+  <tbody>{{ROSTER_ROWS}}</tbody>
+</table>
+
+<h2><span class="n">3</span>Field notes — what each model is for</h2>
+<div class="notes">{{FIELD_NOTES}}</div>
+
+<h2><span class="n">4</span>Pick by task</h2>
+<table class="avoid">
+  <thead><tr><th style="width:34%">If you need…</th><th>Use</th><th style="width:30%">Why</th></tr></thead>
+  <tbody>{{TASK_ROWS}}</tbody>
+</table>
+
+<h2><span class="n">5</span>Measured latency &amp; cost profile</h2>
+<div class="two">
+  <div>
+    <table>
+      <thead><tr><th>Lane</th><th>Observed</th><th>Prompt overhead</th></tr></thead>
+      <tbody>{{LATENCY_ROWS}}</tbody>
+    </table>
+  </div>
+  <div>
+    <p class="kv"><b>Reading the numbers.</b> Free-lane models are fastest but carry a large injected system prompt
+    (that's the cost of keyless frontier access); Kilo lanes are leaner; FCC via OpenRouter is the leanest and slowest.
+    A one-line question costs ~5.9k tokens on the free lane — for cost-sensitive bulk work prefer the utility-tier kilo models or the <code>fcc</code> provider.</p>
+    <p class="kv"><b>Ranking caveat.</b> These are latency and size facts plus practical fit. No benchmark scores are implied;
+    upstream rosters change and quotas rotate. Re-run <code>npm run bakeoff</code> any time for a fresh scorecard.</p>
+  </div>
+</div>
+
+<h2><span class="n">6</span>Using them in OpenCode</h2>
+<ul>
+  <li><b>Select:</b> <code>/models</code> → provider <b>00-free</b> → <code>NN-name</code>. The numbers are the ranking.</li>
+  <li><b>Refresh the roster</b> after upstream changes: <code>npm run sync</code> (re-pulls live models, keeps this order).</li>
+  <li><b>Reorder the top</b>: edit the <code>PRIORITY</code> array in <code>bin/sync-models.mjs</code>, then <code>npm run sync</code>.
+      Unlisted new models append alphabetically — nothing disappears.</li>
+  <li><b>Privacy:</b> Kilo-lane prompts may be logged upstream; route anything sensitive through your own aggregate keys
+      (dashboard → Aggregate) or local Ollama via the <code>fcc</code> provider.</li>
+  <li><b>More lanes</b> (dashboard at <code>http://127.0.0.1:18900</code>): EAC (GitHub sign-in + star) and account channels
+      (LobsterAI, Qoder, TRAE, Cline, Loomy, Raccoon, MiniMax Code, ZCode, Gemini) add models after you sign in.</li>
+</ul>
+
+<h2><span class="n">7</span>Where this came from — and how it actually works</h2>
+<p>
+  <b>No model is hosted by this stack.</b> Every answer comes from a real upstream you can audit.
+  The two things that are local are a loopback gateway and the small repo that wires it into OpenCode.
+</p>
+<table>
+  <thead><tr><th>Lane</th><th>Upstream</th><th>How it's reached</th><th>Good to know</th></tr></thead>
+  <tbody>
+    <tr><td><span class="badge free">free</span></td><td>OpenCode Zen inference<br><small>opencode.ai/inference/v1/*</small></td><td><code>Authorization: Bearer public</code>, a minted per-request session id, and the official v2 client fingerprint</td><td>Direct upstream access — <b>not</b> a bridge through OpenCode. The fingerprint is why a one-line prompt costs ~5.9k tokens.</td></tr>
+    <tr><td><span class="badge kilo">kilo</span></td><td>Kilo AI public gateway<br><small>api.kilo.ai</small></td><td>Keyless; the live <code>isFree</code> slice of Kilo's model listing</td><td>Lean overhead (~2k tok). <b>Prompts may be logged upstream</b> — don't send secrets.</td></tr>
+    <tr><td><span class="badge combo">combo</span></td><td>This machine</td><td>Named failover chains defined in the gateway</td><td>No upstream of its own — it just tries the next free link when one dies before answering.</td></tr>
+    <tr><td><b>fcc</b></td><td>OpenRouter + your local Ollama</td><td>free-claude-code on 127.0.0.1:8082 (Anthropic Messages)</td><td>Leanest prompts (~22 tok). Optional second gateway, not required for anything above.</td></tr>
+  </tbody>
+</table>
+<div class="note">
+  <b>The local pieces.</b> <b>Our Free Model</b> (Ebony-Vinyl/dsh-our-free-model, MIT) runs as a loopback service on
+  <code>127.0.0.1:18900</code> and speaks OpenAI Chat, OpenAI Responses and Anthropic Messages.
+  <b>free-claude-code</b> (Alishahryar1, AGPL-3.0) runs on <code>127.0.0.1:8082</code>, installed at runtime via uv — never bundled here.
+  <b>free-model-bridge</b> (KoBadger, MIT) ships <b>no gateway code at all</b>: just setup, sync, verify, bake-off and this guide.
+  Upstream is cloned straight from GitHub, so what runs on your machine is auditable. No affiliation with OpenCode, DeepSeek, Ebony-Vinyl or Alishahryar1.
+  The bare <code>dsh-our-free-model</code> package on npm is a third-party repackage — this repo clones the source instead.
+</div>
+<div class="note">
+  <b>Security posture.</b> Loopback only, LAN relay disabled, gateway API key kept in
+  <code>~/.our-free-model/settings.json</code> as <code>forwardKey</code>, and <code>HOST=127.0.0.1</code> pinned in
+  <code>~/.fcc/.env</code> (the FCC default is <code>0.0.0.0</code> — LAN-exposed with no auth).
+  Nothing needs admin rights; autostart uses your Startup folder, not Task Scheduler.
+</div>
+
+<h2><span class="n">8</span>Get it running from the repo</h2>
+<p><b>Prereqs:</b> Node ≥ 22.19 (or ≥ 24) and git. Optional: Bun for a faster free-lane transport, and uv (it fetches Python 3.14 itself) only if you want FCC.</p>
+<div class="note">
+  <pre style="margin:0; font-family: Consolas, monospace; font-size:8.4pt;">git clone https://github.com/KoBadger/free-model-bridge
+cd free-model-bridge
+npm run setup            <span style="color:#647689"># add -- --with-fcc for the second gateway</span></pre>
+</div>
+<table>
+  <thead><tr><th style="width:16%">Step</th><th>What <code>npm run setup</code> does</th></tr></thead>
+  <tbody>
+    <tr><td><b>1 · fetch</b></td><td>Shallow-clones the OFM gateway into <code>~/Apps/our-free-model</code> (or <code>~/our-free-model</code> on macOS/Linux).</td></tr>
+    <tr><td><b>2 · start</b></td><td>Starts the gateway on <code>127.0.0.1:18900</code> if it isn't up, and waits for <code>/health</code>.</td></tr>
+    <tr><td><b>3 · config</b></td><td>Creates <code>~/.config/opencode/opencode.json</code> if missing; a timestamped backup is written before <i>every</i> change.</td></tr>
+    <tr><td><b>4 · provider</b></td><td>Writes the <code>00-free</code> provider with the live roster and the <code>provider.use</code> allow entry. The digits-first id is why this group sits on top.</td></tr>
+    <tr><td><b>5 · autostart</b></td><td>Creates a Startup-folder shortcut (no admin). macOS/Linux prints a systemd user-unit line instead.</td></tr>
+    <tr><td><b>6 · optional FCC</b></td><td>Installs free-claude-code via uv on Python 3.14.10, pins <code>HOST=127.0.0.1</code>, starts it, wires the <code>fcc</code> provider and its shortcut.</td></tr>
+  </tbody>
+</table>
+<div class="two">
+  <div>
+    <p class="kv"><b>Everyday flow.</b></p>
+    <ul>
+      <li><code>/models</code> → <code>00-free</code> → <code>NN-name</code>.</li>
+      <li><code>npm run sync</code> — re-pull the live roster into OpenCode.</li>
+      <li><code>npm run guide</code> — regenerate this PDF and the field notes from that roster.</li>
+      <li><code>npm run bakeoff</code> — fresh latency + correctness scorecard.</li>
+      <li><code>npm run verify</code> — the full health check.</li>
+    </ul>
+    <p class="kv">OpenCode hot-reloads config, so nothing needs a restart.</p>
+  </div>
+  <div>
+    <p class="kv"><b>Unlock more lanes</b> in the dashboard at <code>http://127.0.0.1:18900</code> (login token in <code>service.out.log</code>):</p>
+    <ul>
+      <li><b>EAC</b> — GitHub sign-in + star (server-verified), co-paid frontier models.</li>
+      <li><b>Account channels</b> — LobsterAI, Qoder, TRAE, Cline, Loomy, Raccoon, MiniMax Code, ZCode, Gemini, Kilo.</li>
+      <li><b>Aggregate</b> — 76 providers with your own API keys, stored in a <code>0600</code> settings file.</li>
+    </ul>
+    <p class="kv">After unlocking: <code>npm run sync</code> then <code>npm run guide</code>, so the picker and this PDF both show the new models.</p>
+  </div>
+</div>
+
+
+<footer>
+  Free Model Stack — Model Guide · generated {{DATE}} from the live <code>00-free</code> catalog ·
+  repo <b>github.com/KoBadger/free-model-bridge</b> · gateway: Our Free Model standalone (keyless lanes) + free-claude-code (Anthropic surface).
+  Rankings are practical guidance, not benchmarks. Respect upstream rate limits.
+</footer>
+
+</body>
+</html>

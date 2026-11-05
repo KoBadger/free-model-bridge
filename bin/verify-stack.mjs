@@ -52,7 +52,7 @@ add(!!prov, 'free-model provider present in opencode.json', provKey ?? 'missing'
 add(prov?.settings?.apiKey === key, 'provider apiKey matches current forwardKey')
 add(prov?.settings?.baseURL === `http://127.0.0.1:${PORT}/v1`, 'provider baseURL', prov?.settings?.baseURL)
 const entries = Object.entries(prov?.models ?? {})
-add(entries.length >= 25, 'models embedded in provider', `${entries.length}`)
+add(entries.length === models.length, 'models embedded in provider', `${entries.length} (live ${models.length})`)
 const missing = models.map(m => m.id).filter(id => !Object.values(prov?.models ?? {}).some(m => m.modelID === id))
 add(missing.length === 0, 'every live model present in config', missing.length ? missing.join(',') : 'none missing')
 add(entries.every(([, m]) => /\bmodelID\b/.test(JSON.stringify(m))), 'modelID mapping preserved')

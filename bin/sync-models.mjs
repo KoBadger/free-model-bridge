@@ -68,6 +68,8 @@ const PRIORITY = [
   'xingchen-agi/xing4.0-29b-a4b:free',
   'nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free',
   'nvidia/nemotron-3.5-content-safety:free',
+  'crouton-alpha-free',
+  'stealth/crouton-alpha',
 ]
 
 /* Friendly model names; unknown ids fall back to the raw id. */
@@ -100,6 +102,8 @@ const DISPLAY = {
   'xingchen-agi/xing4.0-29b-a4b:free': 'Xing4.0 29B',
   'nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free': 'Nemotron 3 Nano Omni',
   'nvidia/nemotron-3.5-content-safety:free': 'Nemotron Content Safety',
+  'crouton-alpha-free': 'Crouton Alpha',
+  'stealth/crouton-alpha': 'Crouton Alpha (Kilo)',
 }
 
 /* One-line "where it excels / what to use it for" hint, shown in the picker.
@@ -133,6 +137,8 @@ const TAGS = {
   'xingchen-agi/xing4.0-29b-a4b:free': 'kilo · bulk long-output generation',
   'nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free': 'kilo · small omni + vision',
   'nvidia/nemotron-3.5-content-safety:free': 'kilo · moderation/safety checks',
+  'crouton-alpha-free': 'free · new alpha preview',
+  'stealth/crouton-alpha': 'kilo · new alpha preview',
 }
 
 const key = JSON.parse(fs.readFileSync(path.join(DATA_DIR, 'settings.json'), 'utf8')).forwardKey

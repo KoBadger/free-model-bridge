@@ -60,6 +60,8 @@ Open `http://127.0.0.1:18900` (login token is printed in `service.out.log`). The
 | Task | Command |
 |---|---|
 | Refresh OpenCode's model roster from the live gateway (rebuilds the curated `00-…` ordering) | `npm run sync` |
+| Regenerate the model guide (HTML + field notes + PDF) from that same live roster | `npm run guide` |
+| Full stack health check | `npm run verify` |
 | Re-run setup safely (idempotent) | `npm run setup` |
 | Compare lanes: latency + tokens + correctness scorecard | `npm run bakeoff` |
 | Dashboard | `http://127.0.0.1:18900` |
@@ -72,7 +74,7 @@ OpenCode reads `opencode.json` changes live — no restart needed (`/reload` if 
 OpenCode V2 has **no favorite/pin field**, and its catalog sorts providers alphabetically, then models by id. So `npm run sync` uses two levers:
 
 1. **Provider id `00-free`** — digits sort before letters, so the free-model group is the *first* thing in the model list (verified live: `00-free/00-combo:recommended-free` is entry 1 of 367). Display name: `00 · Free Models (keyless)`. If you prefer the old `ofm` key, run `npm run sync -- --provider ofm` — but it drops back to mid-list, which is the whole problem.
-2. **Catalog ids `<NN>-<gateway-id>`** — e.g. `00-free/01-deepseek-v4.1-flash-free`, in curated order `00`–`26`. The real upstream id lives in `modelID`, so behavior is unchanged.
+2. **Catalog ids `<NN>-<gateway-id>`** — e.g. `00-free/01-deepseek-v4.1-flash-free`, numbered `00`, `01`, … in curated order. The real upstream id lives in `modelID`, so behavior is unchanged.
 
 And because V2 has no per-model description field, **the description rides in the display name**: every entry carries a one-line role tag —
 
@@ -86,18 +88,23 @@ Three knobs in `bin/sync-models.mjs`: `PRIORITY` (order), `DISPLAY` (name), `TAG
 ### Model notes & guide
 
 - [`docs/models.md`](docs/models.md) — a short field note per model: what it excels at, what to use it for, and what to watch.
-- [`docs/model-guide.pdf`](docs/model-guide.pdf) — the same, plus a ranked table with context/output/vision at a glance, a pick-by-task cheat sheet and the measured latency table. Matches the picker numbering (`00`–`27`). Source is `docs/model-guide.html`; re-render with Edge:
+- [`docs/model-guide.pdf`](docs/model-guide.pdf) — the same, plus a ranked table with context/output/vision at a glance, a pick-by-task cheat sheet, the measured latency table, and two extra sections: **where all of this came from** (the real upstreams, how the lanes authenticate, security posture) and **how to get it running from this repo** (what `npm run setup` does, step by step).
+
+Both are **generated from the live roster** — after any upstream change:
 
 ```powershell
-msedge --headless=new --no-pdf-header-footer --print-to-pdf="$PWD\docs\model-guide.pdf" "file:///$($PWD.Path -replace '\\','/')/docs/model-guide.html"
+npm run sync    # refresh the OpenCode provider
+npm run guide   # regenerate docs/model-guide.html, docs/models.md and the PDF
 ```
+
+The static sections live in `docs/guide-template.html`; curated per-model notes (name, specialty, field note, longer markdown note) live in `bin/guide-notes.mjs`, and the "pick by task" table drops retired models automatically. New upstream models get a clearly marked fallback note until you add a curated one.
 
 ## What you actually get
 
-**Models observed live on 2026-11-03** (roster is real-time; `npm run sync` refreshes). In OpenCode each one is exposed as `<NN>-<id>` in curated order — `00-free/01-deepseek-v4.1-flash-free`, `00-free/07-nvidia/nemotron-3-ultra-550b-a55b:free`, … — while `modelID` keeps the raw id below:
+**22 models observed live on 2026-11-04** (roster is real-time and churns daily; `npm run sync` refreshes). In OpenCode each one is exposed as `<NN>-<id>` in curated order — `00-free/01-deepseek-v4.1-flash-free`, `00-free/07-nvidia/nemotron-3-ultra-550b-a55b:free`, … — while `modelID` keeps the raw id below. The current, always-up-to-date list with descriptions is in [`docs/models.md`](docs/models.md).
 
-- **Free lane (keyless):** `deepseek-v4.1-flash-free` (1M ctx), `glm-5.3-flash-free` (1M ctx), `mimo-v2.6-flash-free` (1M ctx, vision), `nemotron-3.5-super-vl-free` (1M ctx, vision), `nemotron-3.5-lightning-free`, `big-pickle`, `beam-free`, `flint-40b-free`, `pulse-alpha-free`, plus region-limited additions as they appear.
-- **Kilo pool (keyless):** `kilo-auto/free`, `nvidia/nemotron-3-ultra-550b-a55b:free`, `nvidia/nemotron-3.5-lightning:free`, `thinkingmachines/inkling(-small):free`, `dots-studio/dots-3-note-preview:free`, `stealth/glyph-cluster`, `recursive/flint-v1.0:free`, `cohere/north-mini-code:free`, `google/gemma-4-31b-it:free`, `openrouter/free`, and more.
+- **Free lane (keyless):** `deepseek-v4.1-flash-free` (1M ctx, 384k out), `glm-5.3-flash-free`, `mimo-v2.6-flash-free` (vision), `nemotron-3.5-super-vl-free` (vision), `nemotron-3.5-lightning-free`, `big-pickle`, `beam-free`, `flint-40b-free`, `pulse-alpha-free`, `crouton-alpha-free` (new alpha).
+- **Kilo pool (keyless):** `kilo-auto/free`, `nvidia/nemotron-3-ultra-550b-a55b:free`, `nvidia/nemotron-3.5-super-vl:free`, `nvidia/nemotron-3.5-lightning:free`, `reflection/beam-free`, `stealth/glyph-cluster`, `stealth/crouton-alpha` (new alpha), `dots-studio/dots-3-note-preview:free` (512k in / 460k out), `cohere/north-mini-code:free`, `nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free`, `openrouter/free`.
 - **FCC:** 14 OpenRouter `:free` ids (incl. `open_router/openrouter/free`) + any local Ollama models you have; 359-model catalog if you add keys.
 - **Combos:** fallback/round-robin chains exposed as virtual models (`combo:recommended-free` out of the box).
 

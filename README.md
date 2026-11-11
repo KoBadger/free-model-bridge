@@ -26,15 +26,19 @@ OpenCode ──(provider fcc)──▶ 127.0.0.1:8082 ──▶ free-claude-code
                                     └─ local Ollama models
 ```
 
-## Quick start (Windows 10/11; macOS/Linux notes inline)
+## Quick start (Windows, macOS, Linux)
 
 Prereqs: **Node ≥ 22.19** (or ≥ 24), **git**. Optional: **Bun** (faster free-lane transport; Node fallback works), **Python 3.14 + uv** only if you want FCC.
 
-```powershell
+```bash
 git clone https://github.com/KoBadger/free-model-bridge
 cd free-model-bridge
 npm run setup            # add -- --with-fcc to also install free-claude-code
 ```
+
+Not sure what it will do on your machine? `npm run setup:dry` prints the resolved
+paths, ports and the exact service definition (systemd unit / launchd plist) without
+changing anything.
 
 That single command:
 
@@ -43,7 +47,10 @@ That single command:
 3. starts it on `127.0.0.1:18900` if it isn't already up and waits for `/health`,
 4. creates `~/.config/opencode/opencode.json` if you don't have one (never touching an existing one without a timestamped backup),
 5. generates the **`00-free` provider** with the *live* model roster + the policy-allow entry OpenCode's default-deny policies require,
-6. creates a Startup-folder shortcut so the gateway comes back after reboot (no admin; idempotent — it exits if the service already answers). macOS/Linux: prints a systemd user-unit line instead.
+6. installs autostart for your platform so the gateway comes back after reboot (no admin; idempotent — it exits if the service already answers):
+   - **Windows** — a Startup-folder shortcut (`Startup\FreeModelGateway.lnk`).
+   - **macOS** — a launchd LaunchAgent at `~/Library/LaunchAgents/com.kobadger.free-model-gateway.plist` (`RunAtLoad` + `KeepAlive`).
+   - **Linux** — a systemd *user* unit at `~/.config/systemd/user/free-model-gateway.service` (`systemctl --user enable --now`), with `loginctl enable-linger` when permitted so it starts at boot without a login session.
 7. with `--with-fcc`: installs `free-claude-code` via uv (it fetches Python 3.14.10 itself), **pins `HOST=127.0.0.1` in `~/.fcc/.env`** — the default `0.0.0.0` is LAN-exposed with no auth, so never skip this — starts it, wires the **`fcc` provider**, and creates its startup shortcut.
 
 Then just restart nothing — OpenCode hot-reloads config. Pick models from the `00-free` and `fcc` providers.
@@ -135,7 +142,8 @@ Read the numbers, don't just admire the leftmost column: OFM/Zen lanes are faste
 - **FCC answers empty text on small `max_tokens`** → thinking models eat the budget before emitting text (Anthropic wire format); give them headroom.
 - **A model dies with 403/429 upstream** → free lanes shift; wait out the quota window or `npm run sync` after upstream updates. `combo:` models exist precisely for this.
 - **Kilo lane privacy note** — Kilo prompts *may be logged upstream*. The free lane incidents are the price of keyless access; route anything sensitive through your own aggregate keys instead.
-- **No admin rights needed anywhere** — autostart uses your Startup folder, not Task Scheduler.
+- **No admin rights needed anywhere** — autostart is user-scoped on every platform: a Startup-folder shortcut on Windows, a launchd LaunchAgent on macOS, a systemd `--user` unit on Linux (never Task Scheduler or a system-wide unit).
+- **Choosing or skipping the autostart mechanism** — `node bin/setup.mjs --autostart none` (or `startup|launchd|systemd` to force one) and `--skip-autostart`. `node bin/setup.mjs --print-autostart gateway` dumps just the unit/plist for inspection.
 
 ## Honesty section (worth writing down)
 

@@ -130,15 +130,6 @@ WantedBy=default.target
 const GATEWAY_LABEL = 'com.kobadger.free-model-gateway'
 const FCC_LABEL = 'com.kobadger.free-claude-code'
 
-/* ---------- 1. preflight ---------- */
-step('preflight')
-if (nodeMajor < 22 || (nodeMajor === 22 && minor < 19)) warn(`node ${process.versions.node} found; the OFM gateway targets node ^22.19 || >=24`)
-else ok(`node ${process.versions.node}`)
-if (!tryCommand('git', ['--version'])) die('git is required (used to fetch the gateway sources and sync model rosters)')
-ok('git found')
-if (tryCommand('bun', ['--version'])) ok('bun found (fast free-lane transport)')
-else warn('bun not found — the free lane falls back to node transport (slower but works). Install bun from https://bun.sh if you want it.')
-
 /* ---------- autostart rendering (shared by --dry-run / --print-autostart) ---------- */
 const FCC_ENV_DIR = path.join(os.homedir(), '.fcc')
 const renderAutostart = which => {
@@ -157,11 +148,23 @@ const renderAutostart = which => {
   return `# ${kind}: Startup-folder shortcut (${isFcc ? 'FCCServer' : 'FreeModelGateway'}.lnk)\n`
 }
 
-/* ---------- --print-autostart: dump one unit/plist to stdout, exit ---------- */
+/* ---------- --print-autostart: dump one unit/plist to stdout, exit ----------
+ * This runs before preflight on purpose: stdout must carry the service
+ * definition and nothing else, so the output can be redirected straight into a
+ * file (the CI jobs do exactly that). */
 if (PRINT_AUTOSTART) {
   process.stdout.write(renderAutostart(PRINT_AUTOSTART === 'fcc' ? 'fcc' : 'gateway'))
   process.exit(0)
 }
+
+/* ---------- 1. preflight ---------- */
+step('preflight')
+if (nodeMajor < 22 || (nodeMajor === 22 && minor < 19)) warn(`node ${process.versions.node} found; the OFM gateway targets node ^22.19 || >=24`)
+else ok(`node ${process.versions.node}`)
+if (!tryCommand('git', ['--version'])) die('git is required (used to fetch the gateway sources and sync model rosters)')
+ok('git found')
+if (tryCommand('bun', ['--version'])) ok('bun found (fast free-lane transport)')
+else warn('bun not found — the free lane falls back to node transport (slower but works). Install bun from https://bun.sh if you want it.')
 
 /* ---------- dry run: print the plan, change nothing ---------- */
 if (DRY_RUN) {

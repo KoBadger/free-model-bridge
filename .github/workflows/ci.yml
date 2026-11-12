@@ -54,7 +54,11 @@ jobs:
           node bin/setup.mjs --print-autostart gateway > "$RUNNER_TEMP/gw.service"
           node bin/setup.mjs --print-autostart fcc     > "$RUNNER_TEMP/fcc.service"
           cat "$RUNNER_TEMP/gw.service"
-          grep -q '^\[Unit\]'                 "$RUNNER_TEMP/gw.service"
+          # stdout must be the unit and nothing else, so it can be redirected
+          # straight into a file
+          head -n1 "$RUNNER_TEMP/gw.service" | grep -qx '\[Unit\]'
+          head -n1 "$RUNNER_TEMP/fcc.service" | grep -qx '\[Unit\]'
+          ! grep -q 'preflight' "$RUNNER_TEMP/gw.service"
           grep -q '^ExecStart=.*cli\.mjs --port 18900 --no-lan$' "$RUNNER_TEMP/gw.service"
           grep -q '^WantedBy=default\.target$' "$RUNNER_TEMP/gw.service"
 
@@ -66,6 +70,9 @@ jobs:
           node bin/setup.mjs --print-autostart gateway > "$RUNNER_TEMP/gw.plist"
           node bin/setup.mjs --print-autostart fcc     > "$RUNNER_TEMP/fcc.plist"
           cat "$RUNNER_TEMP/gw.plist"
+          # stdout must be the plist and nothing else
+          head -n1 "$RUNNER_TEMP/gw.plist" | grep -q '^<?xml'
+          ! grep -q 'preflight' "$RUNNER_TEMP/gw.plist"
           plutil -lint "$RUNNER_TEMP/gw.plist"
           plutil -lint "$RUNNER_TEMP/fcc.plist"
           grep -q 'com.kobadger.free-model-gateway' "$RUNNER_TEMP/gw.plist"
